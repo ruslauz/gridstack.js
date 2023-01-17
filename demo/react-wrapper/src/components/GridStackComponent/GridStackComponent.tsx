@@ -247,18 +247,12 @@ const GridStackComponent = (props: GridStackComponentProps) => {
         gridStackRef.current.on(
             gridStackEventType.dropped,
             (
-                event: Event,
+                event,
                 oldNode: GridStackNode | undefined,
-                newNode: GridStackNode,
+                newNode,
             ) => {
-
-                if (newNode.el === undefined) {
-                    return;
-                }
-
-                const nodeEl = newNode.el;
-
-                if (oldNode !== undefined) {
+                if (newNode.el !== undefined && oldNode !== undefined) {
+                    const nodeEl = newNode.el;
                     nodeEl.style.display = 'none';
                     oldNode.grid?.el.append(nodeEl);
                 }

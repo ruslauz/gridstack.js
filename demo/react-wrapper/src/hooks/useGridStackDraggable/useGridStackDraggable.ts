@@ -6,6 +6,8 @@ import shallowEqual from 'shallowequal';
 
 import { gridStackAttributes } from '../../constants';
 import { UseGridStackAttribute, UseGridStackDraggableOptions } from './types';
+import { DDUIData } from 'gridstack';
+import { v4 } from 'uuid';
 
 const dd = new DDGridStack();
 /** Creates Drag-and-Droppable from outside item for GridStack
@@ -41,6 +43,16 @@ const useGridStackDraggable = (options: UseGridStackDraggableOptions) => {
 			...attributeOptions
 		} = options;
 
+		const handleStart = (event: Event, ui: DDUIData) => {
+			console.log("start", event);
+			if (event.target instanceof HTMLElement) {
+				event.target.setAttribute('gs-id', v4());
+			}
+			start?.(event, ui);
+
+		}
+
+
 		/* Initializes as GridStack draggable element */
 		if (!dd.isDraggable(gridStackItemRef.current)) {
 			const ddElement = DDElement.init(gridStackItemRef.current);
@@ -49,11 +61,12 @@ const useGridStackDraggable = (options: UseGridStackDraggableOptions) => {
 				appendTo,
 				helper,
 				handle,
-				start,
+				start: handleStart,
 				stop,
 				drag,
 			});
 		}
+
 
 		/* Sets necessary attributes for gridStack */
 		const optionEntries = Object.entries(attributeOptions);
