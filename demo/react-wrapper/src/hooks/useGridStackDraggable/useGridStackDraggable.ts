@@ -43,16 +43,6 @@ const useGridStackDraggable = (options: UseGridStackDraggableOptions) => {
 			...attributeOptions
 		} = options;
 
-		const handleStart = (event: Event, ui: DDUIData) => {
-			console.log("start", event);
-			if (event.target instanceof HTMLElement) {
-				event.target.setAttribute('gs-id', v4());
-			}
-			start?.(event, ui);
-
-		}
-
-
 		/* Initializes as GridStack draggable element */
 		if (!dd.isDraggable(gridStackItemRef.current)) {
 			const ddElement = DDElement.init(gridStackItemRef.current);
@@ -61,7 +51,7 @@ const useGridStackDraggable = (options: UseGridStackDraggableOptions) => {
 				appendTo,
 				helper,
 				handle,
-				start: handleStart,
+				start,
 				stop,
 				drag,
 			});

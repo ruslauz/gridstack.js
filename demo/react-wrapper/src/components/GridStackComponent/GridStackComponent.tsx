@@ -111,6 +111,7 @@ const GridStackComponent = (props: GridStackComponentProps) => {
                     if (node.el === undefined || node.el?.dataset.id === gridStackUniqueId.current) {
                         return
                     }
+                    //Todo create a utility for extracting widget from node
                     //@ts-ignore
                     const { _id, el, grid, ...newWidget } = node
                     gridStackRef.current?.removeWidget(node.el, true, false)
@@ -146,6 +147,7 @@ const GridStackComponent = (props: GridStackComponentProps) => {
                 }
 
                 const removedWidgets = nodes.map(node => {
+                    //Todo create a utility for extracting widget from node
                     //@ts-ignore
                     const { _id, el, grid, ...widget } = node
                     return widget
@@ -266,7 +268,7 @@ const GridStackComponent = (props: GridStackComponentProps) => {
         };
     }, [onDropped, props.handleClass, props.itemClass]);
 
-    /* On "widgets" property change */
+    /* On "innerWidgets" change */
     useEffect(() => {
         if (gridStackRef.current === null) {
             return;

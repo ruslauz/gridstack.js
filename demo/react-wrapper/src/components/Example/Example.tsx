@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GridStackWidget } from 'gridstack';
+import { DDUIData, GridStackWidget } from 'gridstack';
 import { v4 } from 'uuid';
 
 import GridStackComponent from '../GridStackComponent';
@@ -29,10 +29,17 @@ const layout2: GridStackWidget[] = [
 
 const Example = () => {
   const [widgets, setWidgets] = useState(layout);
+  /* Defines a unique id on each drag start - could be useful in some cases */
+  const handleStart = (event: Event, ui: DDUIData) => {
+    if (event.target instanceof HTMLElement) {
+      event.target.setAttribute('gs-id', v4());
+    }
+  }
+
 
   return (
     <>
-      <GridStackDraggable w={2} h={2}>
+      <GridStackDraggable w={2} h={2} start={handleStart}>
         GridStack drag-droppable from outside item
 			</GridStackDraggable>
       <button
@@ -59,23 +66,16 @@ const Example = () => {
         className={classes.gridStack}
         handleClass={classes.gridStackItemContent}
         onAdded={(_, addedWidgets) => {
-          console.log('onAdd');
           setWidgets(prev => prev.concat(addedWidgets))
         }}
         onRemoved={(_, removedWidgets) => {
-          console.log('onRemoved');
-
           setWidgets(currentWidgets =>
             currentWidgets.filter(currentWidget =>
               removedWidgets.some(removedWidget => removedWidget.id !== currentWidget.id)),
           );
         }}
         onChange={(_, widgets) => {
-          console.log('onChange');
           setWidgets(widgets);
-        }}
-        onDropped={() => {
-          console.log('onDropped');
         }}
       >
         {widgets.map(widget => {
@@ -86,7 +86,7 @@ const Example = () => {
       <br />
 
       {/**
-			 * An uncontrolled grid. Will disappear if the grid is empty.
+			 * An uncontrolled grid with initial layout. Will disappear if the grid is empty.
 			 * */}
       <GridStackComponent
         acceptWidgets
